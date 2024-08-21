@@ -1,40 +1,48 @@
-const mysql = require('mysql2');
 const express = require('express');
 const app = express();
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'SQLpassword1',
-    database: 'testdb'
+// Middleware para servir arquivos estáticos (HTML)
+app.use(express.static('public'));
+
+// Endpoint que exibe o conteúdo enviado pelo usuário
+app.get('/search', (req, res) => {
+    const query = req.query.q;
+    
+    // Resposta vulnerável a XSS
+    res.send(`<h1>Resultados da busca para: ${query}</h1>`);
 });
-
-connection.connect();
-
-// Endpoint vulnerável a SQL Injection
-app.get('/user', (req, res) => {
-    const userId = req.query.id;
-
-	// Consulta vulnerável
-    const query = `SELECT * FROM users WHERE id = ${userId}`;
-    connection.query(query, (error, results) => {
-        if (error) throw error;
-        res.send(results);
-    });
-});
-
-//// Endpoint seguro com uso de parâmetros de consulta
-//app.get('/user', (req, res) => {
-//    const userId = req.query.id;
-
-//    // Consulta segura com parâmetros de consulta
-//    const query = `SELECT * FROM users WHERE id = ?`;
-//    connection.query(query, [userId], (error, results) => {
-//        if (error) throw error;
-//        res.send(results);
-//    });
-//});
 
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
 });
+
+
+//CORREÇÃO PARA XSS
+//const express = require('express');
+//const app = express();
+
+//// Função para escapar caracteres especiais em HTML
+//function escapeHtml(unsafe) {
+//    return unsafe
+//        .replace(/&/g, "&amp;")
+//        .replace(/</g, "&lt;")
+//        .replace(/>/g, "&gt;")
+//        .replace(/"/g, "&quot;")
+//        .replace(/'/g, "&#039;");
+//}
+
+//// Middleware para servir arquivos estáticos (HTML)
+//app.use(express.static('public'));
+
+//// Endpoint seguro contra XSS
+//app.get('/search', (req, res) => {
+//    const query = req.query.q;
+//    const safeQuery = escapeHtml(query);
+
+//    // Resposta segura com escape de HTML
+//    res.send(`<h1>Resultados da busca para: ${safeQuery}</h1>`);
+//});
+
+//app.listen(3000, () => {
+//    console.log('Servidor rodando na porta 3000');
+//});
