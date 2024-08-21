@@ -78,7 +78,7 @@ app.listen(3000, () => {
 //    if (req.user && req.user.role === 'admin') {
 //        next();
 //    } else {
-//        res.status(403).send('Acesso negado. Somente administradores podem realizar esta ação.');
+//        res.status(401).send('Acesso negado. Somente administradores podem realizar esta ação.');
 //    }
 //}
 
@@ -87,7 +87,7 @@ app.listen(3000, () => {
 //    if (req.user && (req.user.role === 'manager' || req.user.role === 'admin')) {
 //        next();
 //    } else {
-//        res.status(403).send('Acesso negado. Somente gerentes de projeto podem realizar esta ação.');
+//        res.status(401).send('Acesso negado. Somente gerentes de projeto podem realizar esta ação.');
 //    }
 //}
 
@@ -98,7 +98,7 @@ app.listen(3000, () => {
 //        req.project = project;
 //        next();
 //    } else {
-//        res.status(403).send('Acesso negado. Você não tem permissão para acessar este projeto.');
+//        res.status(401).send('Acesso negado. Você não tem permissão para acessar este projeto.');
 //    }
 //}
 
@@ -118,6 +118,10 @@ app.listen(3000, () => {
 //    } else {
 //        res.send(`Membro já faz parte do projeto ${req.project.name}.`);
 //    }
+//});
+
+//app.get('/projects', (req, res) => {
+//	res.send(projects);
 //});
 
 //app.listen(3000, () => {
