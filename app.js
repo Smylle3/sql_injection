@@ -1,40 +1,64 @@
-const mysql = require('mysql2');
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'SQLpassword1',
-    database: 'testdb'
+// Configura o body-parser para lidar com formulários
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Simulação de banco de dados em memória
+let userBalance = 1000;
+
+// Endpoint que simula a transferência de fundos
+app.post('/transfer', (req, res) => {
+    const amount = req.body.amount;
+    
+    // Reduz o saldo do usuário (sem validação de CSRF)
+    userBalance -= amount;
+    res.send(`Transferência de R$${amount} realizada com sucesso! Saldo atual: R$${userBalance}`);
 });
-
-connection.connect();
-
-// Endpoint vulnerável a SQL Injection
-app.get('/user', (req, res) => {
-    const userId = req.query.id;
-
-	// Consulta vulnerável
-    const query = `SELECT * FROM users WHERE id = ${userId}`;
-    connection.query(query, (error, results) => {
-        if (error) throw error;
-        res.send(results);
-    });
-});
-
-//// Endpoint seguro com uso de parâmetros de consulta
-//app.get('/user', (req, res) => {
-//    const userId = req.query.id;
-
-//    // Consulta segura com parâmetros de consulta
-//    const query = `SELECT * FROM users WHERE id = ?`;
-//    connection.query(query, [userId], (error, results) => {
-//        if (error) throw error;
-//        res.send(results);
-//    });
-//});
 
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');
 });
+
+//CÓDIGO DE CORREÇÃO
+//const express = require('express');
+//const bodyParser = require('body-parser');
+//const cookieParser = require('cookie-parser');
+//const csrf = require('csurf');
+//const app = express();
+
+//// Configura o body-parser e cookie-parser
+//app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cookieParser());
+
+//// Configura o middleware CSRF
+//const csrfProtection = csrf({ cookie: true });
+
+//// Simulação de banco de dados em memória
+//let userBalance = 1000;
+
+//// Endpoint que serve o formulário com o token CSRF
+//app.get('/transfer', csrfProtection, (req, res) => {
+//    res.send(`
+//        <h1>Realizar Transferência</h1>
+//        <form action="/transfer" method="POST">
+//            <input type="number" name="amount" placeholder="Digite o valor" required>
+//            <input type="hidden" name="_csrf" value="${req.csrfToken()}">
+//            <button type="submit">Transferir</button>
+//        </form>
+//    `);
+//});
+
+//// Endpoint protegido contra CSRF
+//app.post('/transfer', csrfProtection, (req, res) => {
+//    const amount = req.body.amount;
+    
+//    // Reduz o saldo do usuário (agora protegido contra CSRF)
+//    userBalance -= amount;
+//    res.send(`Transferência de R$${amount} realizada com sucesso! Saldo atual: R$${userBalance}`);
+//});
+
+//app.listen(3000, () => {
+//    console.log('Servidor rodando na porta 3000');
+//});

